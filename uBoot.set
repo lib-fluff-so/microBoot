@@ -1,0 +1,68 @@
+[General]
+Version=1.0
+Config=0
+ReleaseIntermediate=.\Release
+ReleaseOutput=.\Release
+DebudIntermediate=.\Debug
+DebugOutput=.\Debug
+EnableFunctionView=0
+DownloadPrompt=0
+DiffDownload=0
+CHECK_DOWNLOAD_VERIFY=0
+BodyName=GPL16250VA_CS0Flash
+[SetLink]
+ExeFile=1
+Output=uBoot.S37
+INTVEC=1
+STARTUP=1
+ALIGNRES=0
+ALIGNNUM=0
+FillUnusedNum=0
+INITTABLE=1
+NONPAGE0=0
+EnableCheckSPIMechanism=0
+[LIBRARY]
+Count=1
+LIB0=CMacro1232.lib
+[SYMBOL]
+Count=0
+[Option]
+CC_LOC=$(APPDIR)\toolchain\udocc
+CC_FLAG_D=-S -gstabs -Wall -mglobal-var-iram -mISA=2.0
+CC_FLAG_R=-S -O1 -Wall -mglobal-var-iram -mISA=2.0
+AS_LOC=$(APPDIR)\toolchain\xasm16
+AS_FLAG_D=-t4 -d -sr
+AS_FLAG_R=-t4 -sr
+LD_LOC=$(APPDIR)\toolchain\xlink16
+LD_FLAG_D=-blank 0x00
+LD_FLAG_R=-blank 0x00
+DebugOpt=0
+ReleaseOpt=1
+IsGenMakefile=1
+IsGenAryfile=1
+IsGenRes=1
+IsInitGlobal=1
+IsGenList=0
+CurIsa=ISA20
+IsWall=1
+POINTER=1
+IsPage0RAM=0
+[AdvancedHard]
+CurrentRomSel=0
+nStackSize=28671
+[Beforebuild]
+Description=Count=0
+Count=0
+[Beforelink]
+Description=Count=0
+Count=0
+[Afterbuild]
+Description=Count=0
+Count=0
+[GPL16250VA_CS0Flash]
+P_MCS0_Ctrl=f, 10
+P_MCS1_Ctrl=f, 10
+P_MCS2_Ctrl=f, 10
+P_MCS3_Ctrl=f, 10
+P_MCS4_Ctrl=f, 10
+P_InMem_Ctrl=f

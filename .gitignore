@@ -1,0 +1,29 @@
+# OS specific
+Thumbs.db
+*.pdb
+.DS_Store
+
+# Builds
+Debug/
+Release/
+
+# Temporary and not so needed
+*.tmp
+*.bak
+*.swp
+*.lik
+*.opt
+*.log
+*.dump
+*.old
+*.Pre
+
+# Compilation temps
+*.o
+*.obj
+*.lst
+
+# IDE Specific
+Resource.asm
+Resource.h
+Resource.inc
