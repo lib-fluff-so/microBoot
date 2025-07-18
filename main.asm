@@ -2,10 +2,10 @@
 
 .TEXT  
 
-.include libui.asm
 .include libnand.asm
 .include libfat.asm
 .include liblib.asm
+.include libgfx.asm
 
 .public _main
 
@@ -31,7 +31,7 @@ _main:
   r1 = 0x0047  
   [0x7824] = r1  
   
-  //IDK, FC does this, not even in datasheet (similar SoC) we have it, but let it be
+  //Set type (20+12)
   r1 = 0x0000
   [0x7856] = r1
     
@@ -87,12 +87,14 @@ _main:
     call _resetNAND
     call _parseBootSector
     
+    r3 = 0x5000
+    r1 = _ProgramFinished
+    call _print
+    
     goto _exit
     
   unknownNAND:  
-    //Placeholder for error handling  
+    r3 = 0x5000
     r1 = _errorUnsupportedNAND  
-    r2 = 36  
-    r3 = 0x2000  
     call _print  
     goto _exit

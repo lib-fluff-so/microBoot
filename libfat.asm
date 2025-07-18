@@ -5,6 +5,7 @@
 
 .include libinclude.asm
 .include libmath.asm
+.include libnand.asm
 
 // void _parseBootSector()
 _parseBootSector:
@@ -23,103 +24,144 @@ _parseBootSector:
   r14 = [_BootSectorCopyAddress] //It is just easier with this
   
   //Data_Start = (Reserved_Sector_Count + Number_of_FATs * FAT_Size_32) * Bytes_Per_Sector
-  //Multiply Number_of_FATs by FAT_Size_32 (NOTE: Only 1 word of FAT_Size_32 is used)
-  r1 = r14 + 0x8          //get address of Number_of_FATs word
-  r3 = [r1]               //get Number_of_FATs word
-  r3 &= 0x00ff            //mask it so only second byte will be there
-  r1 = r14 + 0x12         //get address of only ever used part of FAT_Size_32
-  r4 = [r1]               //get only ever used part of FAT_Size_32
-  mr = r3*r4, uu          //multiply these unsigned values!
+  //Multiply Number_of_FATs by FAT_Size_32
+  r2 = r14 + 0x8                //get address of Number_of_FATs word
+  r2 = [r2]                     //get Number_of_FATs word
+  r2 &= 0x00ff                  //mask it so only second byte will be there
+  r3 = r14 + 0x12               //get address of part of FAT_Size_32
+  r3 = [r3]                     //get part of FAT_Size_32
+  r4 = r14 + 0x13               //get address of part of FAT_Size_32
+  r4 = [r4]                     //get part of FAT_Size_32
+  call _multiply32x16uu         //multiply these unsigned values!
   
-  //Add value we got to Reserved_Sector_Count (NOTE: No reason to use 32 bit add)
-  r1 = r14 + 0x7          //get address of Reserved_Sector_Count word
-  r2 = [r1]               //get Reserved_Sector_Count word
-  r2 = r2 + r3            //add it!
+  //Add value we got to Reserved_Sector_Count
+  r1 = r14 + 0x7                //get address of Reserved_Sector_Count word
+  r1 = [r1]                     //get Reserved_Sector_Count word
+  r2 = 0x0                      //a is 16 bit, so r2 should be 0
+  r3 = r9                       //copy some regs, get mr
+  r4 = r10                      //copy some regs, get mr
+  call _add32x32uu              //add it!
   
-  [0x0003] = r2           //Data_Start sector in RAM
+  [_Data_StartSector0] = r11    //Data_Start sector in RAM
+  [_Data_StartSector1] = r10    //Data_Start sector in RAM
   
   //Multiply Bytes_Per_Sector by the value we got
-  r1 = r14 + 0x5          //get address of first byte of Bytes_Per_Sector
-  r1 = [r1]               //get first byte of Bytes_Per_Sector
-  r1 &= 0xff00            //mask it so only first byte will be there
-  r1 = r1 lsr 0x4         //shifts, making 8 bit shift in sum,
-  r1 = r1 lsr 0x4         //placing it where it would be in value
+  r1 = r14 + 0x5                //get address of first byte of Bytes_Per_Sector
+  r1 = [r1]                     //get first byte of Bytes_Per_Sector
+  r1 &= 0xff00                  //mask it so only first byte will be there
+  r1 = r1 lsr 0x4               //shifts, making 8 bit shift in sum,
+  r1 = r1 lsr 0x4               //placing it where it would be in value
   
-  r4 = r14 + 0x6          //get address of second byte of Bytes_Per_Sector
-  r4 = [r4]               //get second byte of Bytes_Per_Sector
-  r4 &= 0x00ff            //mask it so only second byte will be there
-  r4 = r4 lsl 0x4         //shifts, making 8 bit shift in sum,
-  r4 = r4 lsl 0x4         //placing it where it would be in value
+  r4 = r14 + 0x6                //get address of second byte of Bytes_Per_Sector
+  r4 = [r4]                     //get second byte of Bytes_Per_Sector
+  r4 &= 0x00ff                  //mask it so only second byte will be there
+  r4 = r4 lsl 0x4               //shifts, making 8 bit shift in sum,
+  r4 = r4 lsl 0x4               //placing it where it would be in value
   
-  r1 |= r4               //combine those values into one word
+  r1 |= r4                      //combine those values into one word
   
-  [0x0002] = r1          //Bytes_Per_Sector in RAM
+  [_Bytes_Per_Sector] = r1      //Bytes_Per_Sector in RAM
   
-  mr = r1*r2, uu         //and multiply!
+  r2 = r1                       //prepare data for multiplication
+  r3 = r9                       //prepare data for multiplication
+  r4 = r10                      //prepare data for multiplication
   
-  [0x0000] = r3          //Data_Start address in RAM
-  [0x0001] = r4          //Data_Start address in RAM
+  call _multiply32x16uu         //and multiply
+  
+  [_Data_StartAddress0] = r10   //Data_Start address in RAM
+  [_Data_StartAddress1] = r11   //Data_Start address in RAM
   
   
   
   //Root_Dir = Data_Start + (Root_Cluster - 2) * Sectors_Per_Cluster * Bytes_Per_Sector
-  //Subtract 2 from Root_Cluster (NOTE: No reason to use 32 bit subtract)
-  r1 = r14 + 0x16        //get address of Root_Cluster word
-  r1 = [r1]              //get Root_Cluster word
-  r2 = 0x2               //prepare subtract value
-  r1 -= r2               //subtract!
+  //Subtract 2 from Root_Cluster (subtracting only low part, it would work)
+  r3 = r14 + 0x16              //get first address of Root_Cluster word
+  r3 = [r3]                    //get first Root_Cluster word
+  r4 = r14 + 0x17              //get second address of Root_Cluster word
+  r4 = [r4]                    //get second Root_Cluster word
+  r2 = 0x2                     //prepare subtract value
+  r3 -= r2                     //subtract! (not using 32 bit subtract, no reason ever to)
   
   //Multiply the value we got by Sectors_Per_Cluster
-  r2 = r14 + 0x6         //get address of first byte of Sectors_Per_Cluster
-  r2 = [r2]              //get first byte of Sectors_Per_Cluster
-  r2 &= 0xff00           //mask it so only first byte will be there
-  r2 = r2 lsr 0x4        //shifs, making 8 byte shift in sum,
-  r2 = r2 lsr 0x4        //placing it where it should be
+  r2 = r14 + 0x6               //get address of first byte of Sectors_Per_Cluster
+  r2 = [r2]                    //get first byte of Sectors_Per_Cluster
+  r2 &= 0xff00                 //mask it so only first byte will be there
+  r2 = r2 lsr 0x4              //shifs, making 8 byte shift in sum,
+  r2 = r2 lsr 0x4              //placing it where it should be
   
-  mr = r1*r2, uu         //and multiply!
+  call _multiply32x16uu        //and multiply!
   
-  [0x000d] = r3          //Root_Dir from Data_Start in Ram
-  [0x000e] = r4          //Root_Dir from Data_Start in Ram
+  [_Root_DirCluster0] = r9     //Root_Dir cluster in RAM
+  [_Root_DirCluster1] = r10    //Root_Dir cluster in RAM
   
   //Add the value we got to to Data_Start Sector
-  r1 = [0x0003]          //Get Data_Start Sector from RAM
-  r2 = 0x0
-  call _add32x32uu       //And add!
-  [0x0004] = r9          //Root_Dir Sector in RAM
-  [0x0005] = r10         //Root_Dir sector in RAM
+  r1 = [_Data_StartSector0]    //Get Data_Start Sector from RAM
+  r2 = [_Data_StartSector1]    //Get Data_Start Sector from RAM
+  call _add32x32uu             //And add!
+  [_Root_DirSector0] = r10     //Root_Dir Sector in RAM
+  [_Root_DirSector1] = r11     //Root_Dir Sector in RAM
   
   //Multiply the value we got by Bytes_Per_Sector (will do 32*16)
-  r3 = r9                //Get values
-  r4 = r10               //Get values
-  r2 = [0x0002]          //fetch Bytes_Per_Sector value from memory
-  call _multiply32x16uu  //multiply again!
+  r3 = r11                     //get values
+  r4 = r10                     //get values
+  r2 = [_Bytes_Per_Sector]     //fetch Bytes_Per_Sector value from memory
+  call _multiply32x16uu        //multiply again!
+  [_Root_DirAddress0] = r9
+  [_Root_DirAddress1] = r10
   
   //Get page and offset of Root_Dir
-  r3 = r10               //copy some registers,
-  r4 = r11               //so they would be actual args to divide function
-  r2 = [_NANDFullPage]   //divisor is NAND page size (with OOB)
-  call _divide32x16uuSoftware //YAY!!! DIVIDE!!!
-  [0x0006] = r3          //here goes page
-  [0x0007] = r4          //here goes in-page offset
+  r3 = r9                      //copy some registers,
+  r4 = r10                     //so they would be actual args to divide function
+  r2 = [_NANDPage]             //divisor is NAND page size (without OOB)
+  call _divide32x16uuSoftware  //YAY!!! DIVIDE!!!
+  [_Root_DirPage] = r3         //here goes page
+  [_Root_DirOffset] = r4       //here goes in-page offset
   
   
   
   //FAT = Reserved_Sector_Count * Bytes_Per_Sector
-  r1 = r14 + 0x7         //get address of Reserved_Sector_Count word
-  r1 = [r1]              //get Reserved_Sector_Count word
-  [0x0008] = r1          //Well... FAT Sector in RAM
-  r2 = [0x0002]          //fetch Bytes_Per_Sector value from memory
-  mr = r1*r2, uu         //and multiply to get address!
-  [0x0009] = r3          //FAT address in RAM
-  [0x000a] = r4          //FAT address in RAM
+  r1 = r14 + 0x7               //get address of Reserved_Sector_Count word
+  r1 = [r1]                    //get Reserved_Sector_Count word
+  [_FATSector] = r1            //Well... FAT Sector in RAM
+  r2 = [_Bytes_Per_Sector]     //fetch Bytes_Per_Sector value from memory
+  mr = r1*r2, uu               //and multiply to get address!
+  [_FATAddress0] = r3          //FAT address in RAM
+  [_FATAddress1] = r4          //FAT address in RAM
   
   //Get page and offset of FAT
-  r2 = [_NANDFullPage]   //divisor is NAND page size (with OOB)
+  r2 = [_NANDPage]             //divisor is NAND page size (without OOB)
   //NOTE: MR is already set
   call _divide32x16uuSoftware //YAY!!! DIVIDE!!!
-  [0x000b] = r3          //here goes page
-  [0x000c] = r4          //here goes in-page offset
+  
+  r2 = r3                     //swap them to work with them
+  r3 = r4                     //swap them to work with them
+  r4 = r2                     //swap them to work with them
+  
+  [_FATPage] = r4             //here goes page
+  [_FATOffset] = r3           //here goes offset
+  r3 = 0                      //should've been offset, but this is fine as well
+                              //guaranteed to have no wacky problems, after all
+  
+  //Convert form PPPPOOOO to PPPPPPOO
+  //NOTE: IDK how it works but it works. Let it be, really.
+  r1 = 0x4                    //shift to proper format
+  r3 = r3 lsr r1              //shift to proper format (0x8 shift)
+  mr |= r4 lsr r1             //shift to proper format (0x8 shift)
+  r3 = r3 lsr r1              //shift to proper format (0x8 shift)
+  mr |= r4 lsr r1             //shift to proper format (0x8 shift)
+  r1 = 0x2000                 //copy address here
+  
+  call _resetNAND
+    
+  //Wait (for the sake of god)  
+  call _NANDPolling
+  
+  call _DMACopyNANDPage  //and copy
   
   pop bp, pc from [sp]
+
+//SeekedTable _chainSeeker(uint16 seek=r1)
+_chainSeeker:
+	//NOTE: TBD
 
 .endif

@@ -1,18 +1,18 @@
 #Sunplus Debeloper Project File - Name = SunplusIDE
 #Sunplus Developer Generated Build File Format Version V1.00
 #**DO NOT EDIT**
-#TARTYPE (GPCE2064A)Application
+#TARTYPE (GPL16250VA_CS0Flash)Application
 CFG=Debug
 
 VER=4.1.1 
 # Begin Project
-#Name Begin GPCE2064A-Debug
+#Name Begin GPL16250VA_CS0Flash-Debug
 # Begin SubItem "uBoot  files"
 # Begin Group "Source Files"
 #PROP Default_Filter=cpp;c;cxx;rc;def;r;odl;idl;hpj;bat
 USEPARAM=FALSE
 PARAM=
-EXPORT=1717922657
+EXPORT=3
 SPECIFICFLAG=0
 # Begin Source File
 SOURCE=main.asm
@@ -71,14 +71,6 @@ EXPORT=3
 SPECIFICFLAG=0
 # End Source File
 # Begin Source File
-SOURCE=libui.asm
-USEPARAM=FALSE
-PARAM=
-ID=
-EXPORT=3
-SPECIFICFLAG=0
-# End Source File
-# Begin Source File
 SOURCE=liblib.asm
 USEPARAM=FALSE
 PARAM=
@@ -96,6 +88,14 @@ SPECIFICFLAG=0
 # End Source File
 # Begin Source File
 SOURCE=libinclude.asm
+USEPARAM=FALSE
+PARAM=
+ID=
+EXPORT=3
+SPECIFICFLAG=0
+# End Source File
+# Begin Source File
+SOURCE=libgfx.asm
 USEPARAM=FALSE
 PARAM=
 ID=
@@ -134,19 +134,19 @@ EXPORT=3
 SPECIFICFLAG=0
 # End Source File
 # Begin Source File
-SOURCE=.\GPCE2_Body.h
+SOURCE=GPCE2_Body.h
 USEPARAM=FALSE
 PARAM=
 ID=
-EXPORT=112890352
+EXPORT=3
 SPECIFICFLAG=0
 # End Source File
 # Begin Source File
-SOURCE=.\GPCE2_Body.inc
+SOURCE=GPCE2_Body.inc
 USEPARAM=FALSE
 PARAM=
 ID=
-EXPORT=112892160
+EXPORT=3
 SPECIFICFLAG=0
 # End Source File
 # End Group
@@ -173,14 +173,14 @@ EXPORT=3
 SPECIFICFLAG=0
 # End Group
 # End SubItem
-#Name End GPCE2064A-Debug
-#Name Begin GPCE2064A-Release
+#Name End GPL16250VA_CS0Flash-Debug
+#Name Begin GPL16250VA_CS0Flash-Release
 # Begin SubItem "uBoot  files"
 # Begin Group "Source Files"
 #PROP Default_Filter=cpp;c;cxx;rc;def;r;odl;idl;hpj;bat
 USEPARAM=FALSE
 PARAM=
-EXPORT=1717922657
+EXPORT=3
 SPECIFICFLAG=0
 # Begin Source File
 SOURCE=main.asm
@@ -239,14 +239,6 @@ EXPORT=3
 SPECIFICFLAG=0
 # End Source File
 # Begin Source File
-SOURCE=libui.asm
-USEPARAM=FALSE
-PARAM=
-ID=
-EXPORT=3
-SPECIFICFLAG=0
-# End Source File
-# Begin Source File
 SOURCE=liblib.asm
 USEPARAM=FALSE
 PARAM=
@@ -264,6 +256,14 @@ SPECIFICFLAG=0
 # End Source File
 # Begin Source File
 SOURCE=libinclude.asm
+USEPARAM=FALSE
+PARAM=
+ID=
+EXPORT=3
+SPECIFICFLAG=0
+# End Source File
+# Begin Source File
+SOURCE=libgfx.asm
 USEPARAM=FALSE
 PARAM=
 ID=
@@ -302,19 +302,19 @@ EXPORT=3
 SPECIFICFLAG=0
 # End Source File
 # Begin Source File
-SOURCE=.\GPCE2_Body.h
+SOURCE=GPCE2_Body.h
 USEPARAM=FALSE
 PARAM=
 ID=
-EXPORT=112890352
+EXPORT=3
 SPECIFICFLAG=0
 # End Source File
 # Begin Source File
-SOURCE=.\GPCE2_Body.inc
+SOURCE=GPCE2_Body.inc
 USEPARAM=FALSE
 PARAM=
 ID=
-EXPORT=112892160
+EXPORT=3
 SPECIFICFLAG=0
 # End Source File
 # End Group
@@ -341,7 +341,7 @@ EXPORT=3
 SPECIFICFLAG=0
 # End Group
 # End SubItem
-#Name End GPCE2064A-Release
+#Name End GPL16250VA_CS0Flash-Release
 # End Project
 #Sunplus Debeloper Project File - Name = SunplusIDE
 #Sunplus Developer Generated Build File Format Version V1.00

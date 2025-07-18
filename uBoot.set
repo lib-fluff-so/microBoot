@@ -12,7 +12,7 @@ CHECK_DOWNLOAD_VERIFY=0
 BodyName=GPL16250VA_CS0Flash
 [SetLink]
 ExeFile=1
-Output=uBoot.S37
+Output=.\Debug\uBoot.s37
 INTVEC=1
 STARTUP=1
 ALIGNRES=0

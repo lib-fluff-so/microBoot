@@ -1,6 +1,6 @@
 #####################################################################
 #																	 
-#	Created by u'nSP IDE V4.1.1		23:03:44	07/09/25
+#	Created by u'nSP IDE V4.1.1		22:43:30	07/18/25
 #
 #####################################################################
 
@@ -95,12 +95,12 @@ OBJFILES	= \
 	"$(OUTDIR)\Unused.obj" \
 	"$(OUTDIR)\libfat.obj" \
 	"$(OUTDIR)\libmath.obj" \
-	"$(OUTDIR)\libui.obj" \
 	"$(OUTDIR)\liblib.obj" \
 	"$(OUTDIR)\libnand.obj" \
-	"$(OUTDIR)\libinclude.obj" 
+	"$(OUTDIR)\libinclude.obj" \
+	"$(OUTDIR)\libgfx.obj" 
 
-"$(OUTDIR)\main.obj": "C:\Program Files (x86)\Generalplus\unSPIDE_4.1.1\uBoot\main.asm" 
+"$(OUTDIR)\main.obj": "C:\Program Files (x86)\Generalplus\unSPIDE_4.1.1\uBoot\main.asm" ".\libnand.asm" ".\libfat.asm" ".\liblib.asm" ".\libgfx.asm" ".\libinclude.asm" ".\libmath.asm" 
 	$(AS) $(ASFLAGS) $(INCLUDES) -o "$(OUTDIR)\main.obj" "C:\Program Files (x86)\Generalplus\unSPIDE_4.1.1\uBoot\main.asm" 
 
 "$(OUTDIR)\isr.obj": "C:\Program Files (x86)\Generalplus\unSPIDE_4.1.1\uBoot\isr.asm" 
@@ -112,14 +112,11 @@ OBJFILES	= \
 "$(OUTDIR)\Unused.obj": "C:\Program Files (x86)\Generalplus\unSPIDE_4.1.1\uBoot\Unused.asm" 
 	$(AS) $(ASFLAGS) $(INCLUDES) -o "$(OUTDIR)\Unused.obj" "C:\Program Files (x86)\Generalplus\unSPIDE_4.1.1\uBoot\Unused.asm" 
 
-"$(OUTDIR)\libfat.obj": "C:\Program Files (x86)\Generalplus\unSPIDE_4.1.1\uBoot\libfat.asm" 
+"$(OUTDIR)\libfat.obj": "C:\Program Files (x86)\Generalplus\unSPIDE_4.1.1\uBoot\libfat.asm" ".\libinclude.asm" ".\libmath.asm" ".\libnand.asm" 
 	$(AS) $(ASFLAGS) $(INCLUDES) -o "$(OUTDIR)\libfat.obj" "C:\Program Files (x86)\Generalplus\unSPIDE_4.1.1\uBoot\libfat.asm" 
 
 "$(OUTDIR)\libmath.obj": "C:\Program Files (x86)\Generalplus\unSPIDE_4.1.1\uBoot\libmath.asm" 
 	$(AS) $(ASFLAGS) $(INCLUDES) -o "$(OUTDIR)\libmath.obj" "C:\Program Files (x86)\Generalplus\unSPIDE_4.1.1\uBoot\libmath.asm" 
-
-"$(OUTDIR)\libui.obj": "C:\Program Files (x86)\Generalplus\unSPIDE_4.1.1\uBoot\libui.asm" 
-	$(AS) $(ASFLAGS) $(INCLUDES) -o "$(OUTDIR)\libui.obj" "C:\Program Files (x86)\Generalplus\unSPIDE_4.1.1\uBoot\libui.asm" 
 
 "$(OUTDIR)\liblib.obj": "C:\Program Files (x86)\Generalplus\unSPIDE_4.1.1\uBoot\liblib.asm" 
 	$(AS) $(ASFLAGS) $(INCLUDES) -o "$(OUTDIR)\liblib.obj" "C:\Program Files (x86)\Generalplus\unSPIDE_4.1.1\uBoot\liblib.asm" 
@@ -129,6 +126,9 @@ OBJFILES	= \
 
 "$(OUTDIR)\libinclude.obj": "C:\Program Files (x86)\Generalplus\unSPIDE_4.1.1\uBoot\libinclude.asm" 
 	$(AS) $(ASFLAGS) $(INCLUDES) -o "$(OUTDIR)\libinclude.obj" "C:\Program Files (x86)\Generalplus\unSPIDE_4.1.1\uBoot\libinclude.asm" 
+
+"$(OUTDIR)\libgfx.obj": "C:\Program Files (x86)\Generalplus\unSPIDE_4.1.1\uBoot\libgfx.asm" 
+	$(AS) $(ASFLAGS) $(INCLUDES) -o "$(OUTDIR)\libgfx.obj" "C:\Program Files (x86)\Generalplus\unSPIDE_4.1.1\uBoot\libgfx.asm" 
 
 
 .SUFFIXES : .c .asm .obj .s37 .tsk .res
@@ -161,14 +161,14 @@ CLEANFILES = \
 	"$(OUTDIR)\libfat.lst" \
 	"$(OUTDIR)\libmath.obj" \
 	"$(OUTDIR)\libmath.lst" \
-	"$(OUTDIR)\libui.obj" \
-	"$(OUTDIR)\libui.lst" \
 	"$(OUTDIR)\liblib.obj" \
 	"$(OUTDIR)\liblib.lst" \
 	"$(OUTDIR)\libnand.obj" \
 	"$(OUTDIR)\libnand.lst" \
 	"$(OUTDIR)\libinclude.obj" \
 	"$(OUTDIR)\libinclude.lst" \
+	"$(OUTDIR)\libgfx.obj" \
+	"$(OUTDIR)\libgfx.lst" \
 	"$(BINFILENOEXT).s37" \
 	"$(BINFILENOEXT).tsk" \
 	"$(BINFILENOEXT)_SPI.bin*" \

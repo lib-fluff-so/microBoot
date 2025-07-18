@@ -68,13 +68,13 @@ _DMACopyNANDPage:
   [0x7855] = r10
   r10 = 0x0000
   [0x7851] = r10
-  [0x7852] = r4
-  [0x7853] = r3
+  [0x7852] = r3
+  [0x7853] = r4
   r10 = 0xc200
   [0x7855] = r10
   r10 = 0x0000
-  [0x7852] = r4
-  [0x7853] = r3
+  [0x7852] = r3
+  [0x7853] = r4
   r10 = 0x0030
   [0x7851] = r10
   call _NANDPolling
@@ -88,7 +88,7 @@ _DMACopyNANDPage:
 
 
 // _CPUCopyNAND(uint32 read_address=mr, word* dest=r1)  
-// This function is entirely untested and unused, because it is not neded
+// This function is entirely untested and unused, because it is not needed
 _CPUCopyNANDPage:
   push bp, bp to [sp]
   push r10, r10 to [sp]
