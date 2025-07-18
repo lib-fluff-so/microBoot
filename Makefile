@@ -1,6 +1,6 @@
 #####################################################################
 #																	 
-#	Created by u'nSP IDE V4.1.1		22:43:30	07/18/25
+#	Created by u'nSP IDE V4.1.1		23:42:49	07/18/25
 #
 #####################################################################
 
@@ -100,7 +100,7 @@ OBJFILES	= \
 	"$(OUTDIR)\libinclude.obj" \
 	"$(OUTDIR)\libgfx.obj" 
 
-"$(OUTDIR)\main.obj": "C:\Program Files (x86)\Generalplus\unSPIDE_4.1.1\uBoot\main.asm" ".\libnand.asm" ".\libfat.asm" ".\liblib.asm" ".\libgfx.asm" ".\libinclude.asm" ".\libmath.asm" 
+"$(OUTDIR)\main.obj": "C:\Program Files (x86)\Generalplus\unSPIDE_4.1.1\uBoot\main.asm" 
 	$(AS) $(ASFLAGS) $(INCLUDES) -o "$(OUTDIR)\main.obj" "C:\Program Files (x86)\Generalplus\unSPIDE_4.1.1\uBoot\main.asm" 
 
 "$(OUTDIR)\isr.obj": "C:\Program Files (x86)\Generalplus\unSPIDE_4.1.1\uBoot\isr.asm" 
@@ -112,7 +112,7 @@ OBJFILES	= \
 "$(OUTDIR)\Unused.obj": "C:\Program Files (x86)\Generalplus\unSPIDE_4.1.1\uBoot\Unused.asm" 
 	$(AS) $(ASFLAGS) $(INCLUDES) -o "$(OUTDIR)\Unused.obj" "C:\Program Files (x86)\Generalplus\unSPIDE_4.1.1\uBoot\Unused.asm" 
 
-"$(OUTDIR)\libfat.obj": "C:\Program Files (x86)\Generalplus\unSPIDE_4.1.1\uBoot\libfat.asm" ".\libinclude.asm" ".\libmath.asm" ".\libnand.asm" 
+"$(OUTDIR)\libfat.obj": "C:\Program Files (x86)\Generalplus\unSPIDE_4.1.1\uBoot\libfat.asm" 
 	$(AS) $(ASFLAGS) $(INCLUDES) -o "$(OUTDIR)\libfat.obj" "C:\Program Files (x86)\Generalplus\unSPIDE_4.1.1\uBoot\libfat.asm" 
 
 "$(OUTDIR)\libmath.obj": "C:\Program Files (x86)\Generalplus\unSPIDE_4.1.1\uBoot\libmath.asm" 

@@ -143,8 +143,8 @@ _parseBootSector:
                               //guaranteed to have no wacky problems, after all
   
   //Convert form PPPPOOOO to PPPPPPOO
-  //NOTE: IDK how it works but it works. Let it be, really.
-  r1 = 0x4                    //shift to proper format
+  //Shift to proper format (0x8 shift)
+  r1 = 0x4                    //shift to proper format (0x8 shift)
   r3 = r3 lsr r1              //shift to proper format (0x8 shift)
   mr |= r4 lsr r1             //shift to proper format (0x8 shift)
   r3 = r3 lsr r1              //shift to proper format (0x8 shift)
