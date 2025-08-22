@@ -78,43 +78,27 @@ _divide32x16uu:
   pop r1, r1 from [sp]
   pop bp, pc from [sp]
 
-// uint48 _add32x32uu(uint32 a=mr, uint32 b=r2:r1) => r11:r10:r9
+// uint48 _add32x32uu(uint32 a=mr, uint32 b=r1:r2) => r11:r10:r9
 _add32x32uu:
   push bp, bp to [sp]
-  push r13, r13 to [sp]   //carry purposes
-  push r14, r14 to [sp]   //temp add
-  bp = sp + 3
+  bp = sp + 1
   
-  //r4 + r2
-  r14 = r4
-  r14 += r2
-  r11 = r14                //first bit of result
-
-  //keep carry in mind
-  r13 = 0x0000
-  r13 += 0x0000, carry
-
-  //r3 + r1
-  r14 = r3
-  r14 += r1
-  r14 += r13
-  r10 = r14               //second bit of result
-
-  //keep carry in mind
-  r13 = 0x0000
-  r13 += 0x0000, carry
-
-  //r11 = carry
-  r9 = r13               // bits 32–47 = carry1
-
-  pop r14, r14 from [sp]  //temp add
-  pop r13, r13 from [sp]  //carry purposes
+  r9 = 0x0000
+  r10 = r2
+  r11 = r1
+  
+  r11 += r3
+  
+  r10 += r4, carry
+  
+  r9 += 0x0000, carry
   pop bp, pc from [sp]
 
 // uint48 _multiply32x16uu(uint32 a=mr, uint16 b=r2) => r11:r10:r9
 _multiply32x16uu:
   push bp, bp to [sp]
   push r1, r1 to [sp]
+  push r3, r4 to [sp]
   push r12, r15 to [sp]
   push r14, r14 to [sp]
   bp = sp + 4
@@ -138,6 +122,7 @@ _multiply32x16uu:
   
   pop r14, r14 from [sp]
   pop r12, r15 from [sp]
+  pop r3, r4 from [sp]
   pop r1, r1 from [sp]
   pop bp, pc from [sp]
 

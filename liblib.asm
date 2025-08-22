@@ -5,7 +5,25 @@
 
 .include libinclude.asm
 
-//void _nothing()  
+_byteSwap:
+  push bp, bp to [sp]
+  push r4, r4 to [sp]
+  //who needs frame pointer in _byteSwap?
+  r4 = r1
+  r1 = r1 lsl 4
+  r1 = r1 lsl 4
+  r4 = r4 lsr 4
+  r4 = r4 lsr 4
+  r1 |= r4
+  pop r4, r4 from [sp]
+  pop bp, pc from [sp]
+
+_DMAPolling:
+  tstb [0x7a80], 1
+  jnz _DMAPolling
+  retf
+
+//void _exit()  
 _exit:  
   jmp _exit
   
@@ -19,8 +37,9 @@ _print:
     r4 = [r1]  
     cmp r4, PRINT_END
     je function_end
-    ds:[r3] = r4  
-    r1 += 1  
+    [r3] = r4  
+    
+    r1 += 1
     r3 += 1
     jmp cycle
   

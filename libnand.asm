@@ -4,6 +4,7 @@
 .define __LIBNAND_INCLUDED__
 
 .include libinclude.asm
+.include liblib.asm
 
 // void _resetNAND()
 _resetNAND:
@@ -38,7 +39,7 @@ _NANDPolling:
   pop r1, r1 from [sp]  
   pop bp, pc from [sp]  
   
-// _DMACopyNANDPage(uint32 read_address=mr, word* dest=r1)
+// page _DMACopyNANDPage(uint32 read_address=mr, word* dest=r1)
 // NOTE: read_address is in format PPPPPPOO, where P is Page and O is Offset
 _DMACopyNANDPage:
   push bp, bp to [sp]
@@ -56,7 +57,7 @@ _DMACopyNANDPage:
   r10 = 0x0000
   [0x7a84] = r10    //P_DMA_SRC_AddrH0
   r10 = [_NANDFullPage]
-  [0x7a83] = r10     //P_DMA_TCountL0
+  [0x7a83] = r10    //P_DMA_TCountL0
   r10 = 0x0000
   [0x7a86] = r10    //P_DMA_TCountH0
   r10 = 0x0005
@@ -81,54 +82,26 @@ _DMACopyNANDPage:
   r10 = [0x7a80]
   r10 += 0x1
   [0x7a80] = r10
+  call _DMAPolling
   
   pop r10, r10 from [sp]
   pop bp, pc from [sp]
 
 
-
-// _CPUCopyNAND(uint32 read_address=mr, word* dest=r1)  
-// This function is entirely untested and unused, because it is not needed
-_CPUCopyNANDPage:
+// uint32 _generateNANDAddressWithoutOffset(uint32 page_offset=mr)
+_generateNANDAddressWithoutOffset:
   push bp, bp to [sp]
-  push r10, r10 to [sp]
-  push r2, r2 to [sp]
-  bp = sp + 2
-
-  //Read NAND without DMA
   
-  r10 = 0x0055         //NAND control reg enable  
-  [0x7850] = r10 
+  r3 = 0                      //should've been offset, but this is fine as well
+                              //guaranteed to have no wacky problems, after all
+  //Convert form PPPPOOOO to PPPPPPOO
+  //Shift to proper format (0x8 shift)
+  r1 = 0x4                    //shift to proper format (0x8 shift)
+  r3 = r3 lsr r1              //shift to proper format (0x8 shift)
+  mr |= r4 lsr r1             //shift to proper format (0x8 shift)
+  r3 = r3 lsr r1              //shift to proper format (0x8 shift)
+  mr |= r4 lsr r1             //shift to proper format (0x8 shift)
   
-  r10 = 0xc000         //DMA INT setup
-  [0x7855] = r10 
-  
-  r10 = 0x0000         //Read page command  
-  [0x7851] = r10  
-  
-  r10 = 0xc600 //DMA INT
-  [0x7855] = r10
-  
-  r10 = 0x0000
-  [0x7852] = r4        //low address
-  [0x7853] = r3        //high address
-  
-  r10 = 0x0030
-  [0x7851] = r10
-  
-  call _NANDPolling
-  
-  r10 = [_NANDFullPage]
-  copyLoop:
-  	r10 -= 0x1
-    r2 = [0x7854]
-  	[r1] = r2 
-	r1 += 0x1
-	cmp r10, 0x0
-	jne copyLoop
-  
-  pop r2, r2 from [sp]
-  pop r10, r10 from [sp]
   pop bp, pc from [sp]
   
 .endif
