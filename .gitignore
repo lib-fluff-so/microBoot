@@ -17,6 +17,7 @@ Release/
 *.dump
 *.old
 *.Pre
+Makefile
 
 # Compilation temps
 *.o
